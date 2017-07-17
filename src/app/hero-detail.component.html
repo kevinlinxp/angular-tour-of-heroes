@@ -1,0 +1,27 @@
+<!--
+  Remember that the leading asterisk (*) in front of ngIf is a critical
+  part of this syntax.
+-->
+<div *ngIf="hero">
+  <h2>{{hero.name}} details!</h2>
+  <div>
+    <label>id: </label>{{hero.id}}
+  </div>
+  <div>
+    <label>name: </label>
+    <!--
+      We can both display and change the hero’s name after adding a two-way
+      data binding to the <input> element using the built-in ngModel
+      directive.
+
+      The ngModel directive also propagates changes to every other binding of
+      the hero.name.
+
+      Angular processes all data bindings once per JavaScript event cycle, from
+      the root of the application component tree through all child components.
+    -->
+    <input type="text" [(ngModel)]="hero.name" placeholder="name"/>
+  </div>
+  <button (click)="goBack()">Back</button>
+  <button (click)="save()">Save</button>
+</div>

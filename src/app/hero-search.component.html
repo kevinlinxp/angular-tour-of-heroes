@@ -1,0 +1,26 @@
+<div id="search-component">
+  <h4>Hero Search</h4>
+  <input #searchBox id="search-box" (keyup)="search(searchBox.value)" />
+  <!--      ↑
+      Template Reference Variable
+        - A good way to decouple the template and component
+        - Use it with something in response to asynchronous events, such as
+          keystrokes.
+
+      Pseudo-event:
+        <input #box (keyup.enter)="onEnter(box.value)"
+                             ↑ Pseudo-event
+                    (blur)="update(box.value)">
+  -->
+  <div>
+    <!--
+       The async pipe subscribes to the Observable and produces the array of
+       heroes to *ngFor
+    -->
+    <!--            ↓ template input variable -->
+    <div *ngFor="let hero of heroes | async"
+         (click)="gotoDetail(hero)" class="search-result" >
+      {{hero.name}}
+    </div>
+  </div>
+</div>

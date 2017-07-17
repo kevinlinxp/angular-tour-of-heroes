@@ -1,0 +1,135 @@
+<!--
+  Almost all HTML syntax is valid template syntax, except for:
+    <script> - forbidden
+    <html>, <body>, and <base> - don't make much sense in a template
+-->
+
+<!--
+  Template Expression
+
+  {{ template expression }}, will be evaluated and then converted to a
+  string
+
+  JavaScript expressions that have or promote side effects are prohibited,
+  including:
+    - assignments (=, +=, -=, ...)
+    - new
+    - chaining expressions with ; or ,
+    - increment and decrement operators (++ and --)
+  Other notable differences from JavaScript syntax include:
+    - no support for the bitwise operators | and &
+    - new template expression operators, such as | and ?.
+
+  Template expressions can make or break an application. Please follow these
+  guidelines:
+    - No visible side effects
+    - Quick execution
+    - Simplicity
+    - Idempotence
+-->
+
+<!--
+  Template statements
+
+    (event)="statement"
+
+  A template statement has a side effect. That's the whole point of an event.
+  It's how you update application state from user action.
+
+  Responding to events is the other side of Angular's "unidirectional data
+  flow". You're free to change anything, anywhere, during this turn of the
+  event loop.
+
+  Syntax is not allowed:
+
+  - new
+  - increment and decrement operators, ++ and --
+  - operator assignment, such as += and -=
+  - the bitwise operators | and &
+  - the template expression operators
+-->
+
+<!--
+  Data Binding:
+
+    * Once you start data binding, you are no longer working with     *
+    * HTML attributes. You aren't setting attributes. You are setting *
+    * the properties of DOM elements, components, and directives.     *
+    * i.e., template binding works with properties and events, not    *
+    * attributes.                                                     *
+
+  Binding types other than interpolation have a target name to the left of the
+  equal sign, either surrounded by punctuation ([], ()) or preceded by a prefix
+  (bind-, on-, bindon-).
+
+  The target name is the name of a property. It may look like the name of an
+  attribute but it never is. To appreciate the difference, you must develop a
+  new way to think about template HTML.
+
+  1. One-way from data source to view target
+    {{expression}} (Interpolation)
+    target = "{{expression}}" (Interpolation)
+    [target] = "expression" (Property, Attribute, Class, Style)
+    bind-target = "expression" (Property, Attribute, Class, Style)
+
+    Examples (Interpolation):
+      {{value-in-this-component}}
+                         ↑ ↓ Tempate Expression
+      <p><img src="{{heroImageUrl}}"> is the <i>interpolated</i> image.</p>
+
+    Example (Property binding):
+      <p><img [src]="heroImageUrl"> is the <i>property bound</i> image.</p>
+                         ↑ Tempate Expression ↓
+      [property-of-child-component]="value-in-this-component"
+
+  2. One-way from view target to data source
+    (target) = "statement" (Event)
+    on-target = "statement" (Event)
+
+    Example (Event binding):
+      (event)="handler-in-this-component($event)"
+          ↑                 ↑                ↑
+      Target of         Tempalte        Event Payload
+    the binding        Statement        (Optional)
+
+    Example (a fake two-way binding using property binding and event binding)
+      <input [value]="currentHero.name"
+             (input)="currentHero.name=$event.target.value" >
+
+  3. Two-way
+    [(target)] = "expression" (Two-way)
+    bindon-target = "expression" (Two-way)
+-->
+<h2>My Heroes</h2>
+<ul class="heroes">
+  <div>
+    <label>Hero name:</label> <input #heroName />
+    <button (click)="add(heroName.value); heroName.value=''">
+      Add
+    </button>
+  </div>
+  <!--
+    The (*) prefix to ngFor indicates that the <li> element and its children
+    constitute a master template. The ngFor directive iterates over the
+    heroes array returned by the HeroesComponent.heroes property and stamps out
+    instances of this template.
+
+    The quoted text assigned to ngFor means “take each hero in the heroes
+    array, store it in the local hero variable, and make it available to the
+    corresponding template instance”.
+  -->
+  <li *ngFor="let hero of heroes"
+    (click)="onSelect(hero)"
+    [class.selected]="hero === selectedHero">
+    <span class="badge">{{hero.id}}</span> {{hero.name}}
+    <button class="delete"
+           (click)="delete(hero); $event.stopPropagation()">x</button>
+  </li>
+
+  <div *ngIf="selectedHero">
+    <h2>
+      {{selectedHero.name | uppercase}} is my hero
+    </h2>
+    <button (click)="gotoDetail()">View Details</button>
+  </div>
+</ul>
