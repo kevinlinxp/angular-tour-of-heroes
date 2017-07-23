@@ -26,7 +26,21 @@ import { HeroSearchComponent } from './hero-search.component';
  * decorators that attach metadata to classes so that it knows what those
  * classes mean and how they should work. */
 @NgModule({
-  /* The view classes that belong to this module. Angular has three kinds of
+  /* -- "What do I need?"
+   * Other modules whose exported classes are needed by component templates
+   * declared in this module.
+   *
+   * Only NgModule classes go in the imports array. Don't put any other kind of
+   * class in imports. */
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
+    AppRoutingModule
+  ],
+  /* -- "What do I have?"
+   * The view classes that belong to this module. Angular has three kinds of
    * view classes: components, directives, and pipes
    *
    * You must declare every component in one (and only one) NgModule class.
@@ -41,23 +55,12 @@ import { HeroSearchComponent } from './hero-search.component';
     HeroDetailComponent,
     HeroSearchComponent
   ],
-  /* The subset of declarations that should be visible and usable in the
+  /* -- "What do I provide"?
+   * The subset of declarations that should be visible and usable in the
    * component templates of other modules. */
   exports: [
     // A root module has no reason to export anything because other components
     // don't need to import the root module.
-  ],
-  /* Other modules whose exported classes are needed by component templates
-   * declared in this module.
-   *
-   * Only NgModule classes go in the imports array. Don't put any other kind of
-   * class in imports. */
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService),
-    AppRoutingModule
   ],
   /* Creators of services that this module contributes to the global collection
    * of services; they become accessible in all parts of the app.
